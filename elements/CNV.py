@@ -1,14 +1,19 @@
 def reg(cn, equiv):
     copies = int(cn)
     eq = equiv.lower() == 'true'
-    if eq and copies > 2:
-        return 1
-    else:
-        if copies < 2:
-            return -2
-        elif copies < 3:
+    if eq:
+        if copies == 0:
+            # Equivocal Loss
             return -1
         else:
+            # Equivocal Amplification
+            return 1
+    else:
+        if copies == 0:
+            # Not Equivocal Loss
+            return -2
+        else:
+            # Not Equivocal Loss
             return 2
 
 
