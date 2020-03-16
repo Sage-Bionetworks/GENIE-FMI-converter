@@ -57,7 +57,7 @@ class element:
                 child.find_path(element_name, pre)
 
 
-    # returns first element matching full path
+    # returns first elements matching full path
     def get(self, item, *items):
         if items and item == self.name:
             return self.get(*items)
