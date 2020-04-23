@@ -1,21 +1,16 @@
+
 def reg(cn, equiv):
     copies = int(cn)
-    eq = equiv.lower() == 'true'
-    if eq:
-        if copies == 0:
-            # Equivocal Loss
+    if equiv and copies > 2:
+        return 1
+    else:
+        if copies < 2:
+            return -2
+        elif copies < 3:
             return -1
         else:
-            # Equivocal Amplification
-            return 1
-    else:
-        if copies == 0:
-            # Not Equivocal Loss
-            return -2
-        else:
-            # Not Equivocal Loss
             return 2
-
+        
 
 # Here we're keeping a dictionary of
 # gene : {sample : copy-number}
@@ -24,7 +19,7 @@ def generate_cnv(paths, iID, p_ident, s_ident, cnvs, keys):
     keys.append(sample)
 
     for path in paths:
-        values = {sample: str(reg(path.attr("copy-number"), path.attr("equivocal")))}
+        values = {sample: str(reg(path.attr("copy-number"), path.attr("equivocal"))) for path in paths}
 
         try:
             cnvs[path.attr("gene")].update(values)
@@ -41,5 +36,5 @@ def output_cnvs(iID, cnvs, keys):
         for gene, values in cnvs.items():
             print(gene,
                   "\t".join(values[key] if key in values
-                            else "0" for key in keys),
+                                        else "0" for key in keys),
                   file=out, sep="\t")
